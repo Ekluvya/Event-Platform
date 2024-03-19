@@ -27,6 +27,7 @@ const populateEvent = (query: any) => {
     .populate({ path: 'category', model: Category, select: '_id name' })
 }
 
+
 // CREATE
 export async function createEvent({ userId, event, path }: CreateEventParams) {
   try {
@@ -34,7 +35,11 @@ export async function createEvent({ userId, event, path }: CreateEventParams) {
 
     const organizer = await User.findById(userId)
     if (!organizer) throw new Error('Organizer not found')
-
+    console.log( {
+      categoryId: event.categoryId,
+      organizerId: userId
+    }
+    )
     const newEvent = await Event.create({ ...event, category: event.categoryId, organizer: userId })
     revalidatePath(path)
 
